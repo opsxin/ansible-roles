@@ -1,6 +1,6 @@
 # Ansible Role: Mysql 5.7
 
-CentOS 7/8 and Debian 8/9/10 install [mysql](https://www.mysql.com/) role.
+CentOS 7 and Debian 8/9/10 install [mysql](https://www.mysql.com/) role.
 
 ## Example Playbook
 

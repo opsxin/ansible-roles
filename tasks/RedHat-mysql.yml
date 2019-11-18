@@ -14,12 +14,13 @@
 - name: Modify mysql communtity
   replace:
     path: /etc/yum.repos.d/mysql-community.repo
-    regexp: "^(.*)http://repo.mysql.com(.*)"
-    replace: '\1https://mirrors.ustc.edu.cn/mysql-repo\2'
+    regexp: "^(.*)http://repo.mysql.com/yum/mysql-5.6-community/el/7/$basearch/"
+    replace: '\1https://mirrors.tuna.tsinghua.edu.cn/mysql/yum/mysql57-community-el7'
     backup: yes
 
 # 中科大的最新版为 5.7.25
 # 191118 最新版为 5.7.27
+# 换清华源
 - name: Install mysql
   yum:
     name:

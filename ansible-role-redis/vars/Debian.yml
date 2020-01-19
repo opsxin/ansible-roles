@@ -1,0 +1,5 @@
+---
+
+Redis_pkg_name: redis-server
+Redis_svc_name: redis-server
+Redis_conf_path: /etc/redis/redis.conf

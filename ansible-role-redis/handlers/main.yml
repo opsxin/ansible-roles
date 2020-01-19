@@ -1,0 +1,7 @@
+---
+
+- name: restart redis
+  systemd:
+    name: "{{ Redis_svc_name }}"
+    state: restarted
+    enabled: yes

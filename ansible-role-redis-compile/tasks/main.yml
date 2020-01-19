@@ -1,0 +1,63 @@
+---
+
+- name: Download latest stable redis
+  get_url:
+    url: "{{ stable_redis_url }}"
+    dest: /tmp/redis-stable.tgz
+  connection: local
+  run_once: true
+
+- name: Install dependent
+  package:
+    name:
+      - make
+      - gcc
+    state: present
+    update_cache: yes
+
+- name: Upload redis
+  unarchive:
+    src: /tmp/redis-stable.tgz
+    dest: /tmp
+
+- name: CentOS <jemalloc> error
+  command: make hiredis lua jemalloc linenoise
+  args:
+    chdir: /tmp/redis-stable/deps
+  when: ansible_os_family == "RedHat"
+
+- name: Compile and Install
+  shell: make && make install
+  args:
+    chdir: /tmp/redis-stable
+    creates: /usr/local/bin/redis-server
+  register: result
+
+- name: Delete redis directory
+  file:
+    path: /tmp/redis-stable
+    state: absent
+  when: result.rc == 0
+
+- name: Create group redis
+  group:
+    name: redis
+    system: yes
+
+- name: Create user redis
+  user:
+    name: redis
+    group: redis
+    system: yes
+    shell: /sbin/nologin
+
+- name: Add redis.service
+  template:
+    src: redis.service.j2
+    dest: /lib/systemd/system/redis.service
+
+- name: Add redis.conf
+  template:
+    src: redis.conf.j2
+    dest: /etc/redis.conf
+  notify: start redis

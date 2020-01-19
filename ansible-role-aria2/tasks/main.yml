@@ -1,0 +1,55 @@
+---
+
+- name: Ensure aria2 is installed
+  apt:
+    name: aria2
+    state: present
+    update_cache: yes
+
+- name: Ensure directory exist
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: nobody
+    group: nogroup
+  with_items:
+    - "{{ aria2_path }}"
+    - "{{ aria2_dir }}"
+
+- name: Touch session and dht file
+  file:
+    path: "{{ item }}"
+    state: touch
+    owner: nobody
+    group: nogroup
+  with_items:
+    - "{{ aria2_path }}/{{ aria2_session_file }}"
+    - "{{ aria2_path }}/{{ aria2_dht_file }}"
+
+- name: Ensure aria2 configure
+  template:
+    src: aria2.conf.j2
+    dest: "{{ aria2_path }}/aria2.conf"
+    owner: nobody
+    group: nogroup
+
+# 打开防火墙端口
+- name: Firewall accept port
+  iptables:
+    action: insert
+    chain: INPUT
+    protocol: "{{ item.proto }}"
+    destination_port: "{{ item.port }}"
+    jump: ACCEPT
+  with_items:
+    - {port: "{{ aria2_rpc_listen_port }}", proto: "tcp"}
+    - {port: "{{ aria2_listen_port.split('-') | join(':') }}", proto: "tcp"}
+    - {port: "{{ aria2_listen_port.split('-') | join(':') }}", proto: "udp"}
+    - {port: "{{ aria2_dht_listen_port.split('-') | join(':') }}", proto: "tcp"}
+    - {port: "{{ aria2_dht_listen_port.split('-') | join(':') }}", proto: "udp"}
+
+- name: Add aria2.service
+  template:
+    src: aria2.service.j2
+    dest: /lib/systemd/system/aria2.service
+  notify: start aria2

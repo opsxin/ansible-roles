@@ -1,0 +1,24 @@
+# HTTPS 使用 
+aria2_rpc_secure: "false"
+aria2_rpc_certificate: "/usr/local/xxx.cer"
+aria2_rpc_private_key: "/usr/local/xxx.key"
+
+# 文件的保存路径(可使用绝对路径或相对路径), 默认: 当前启动位置
+aria2_dir: "/data"
+
+# 会话文件
+aria2_session_file: "aria2.session"
+
+# 启用 RPC, 默认:false
+aria2_enable_rpc: "true"
+# RPC 监听端口, 默认:6800
+aria2_rpc_listen_port: "6800"
+# RPC 密码
+aria2_rpc_secret: "hsin"
+
+# DHT(IPV4) 文件
+aria2_dht_file: "dht.dat"
+# BT 监听端口, 默认:6881-6999"
+aria2_listen_port: "12345-12350"
+# DHT 监听端口, 默认:6881-6999
+aria2_dht_listen_port: "12345-12350"

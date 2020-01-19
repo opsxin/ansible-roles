@@ -1,0 +1,33 @@
+---
+
+- name: Ensure old docker is removed
+  apt:
+    name:
+      - docker
+      - docker-engine
+      - docker.io
+      - containerd
+      - runc
+    state: absent
+
+- name: Ensure dependencies is install
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg2
+      - software-properties-common
+    state: present
+    update_cache: yes
+
+- name: Add docker GPG key
+  apt_key:
+    url: "{{ docker_gpg_key }}"
+    state: present
+
+- name: Add docker repository
+  apt_repository:
+    repo: "{{ docker_apt_repository }}"
+    filename: docker-ce
+    state: present

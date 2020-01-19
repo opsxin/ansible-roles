@@ -1,0 +1,24 @@
+---
+
+# docker package repository
+docker_gpg_key:
+  https://download.docker.com/linux/debian/gpg
+docker_apt_repository: >-
+  deb [arch=amd64] https://download.docker.com/linux/debian 
+  {{ ansible_distribution_release }} stable
+docker_yum_repository: 
+  https://download.docker.com/linux/centos/docker-ce.repo
+
+# docker images register
+docker_registry_mirrors: 
+  - "http://f1361db2.m.daocloud.io"
+  - "http://hub-mirror.c.163.com"
+
+# docker-compose
+docker_install_compose: true
+docker_compose_version: "1.24.1"
+docker_compose_path: /usr/local/bin/docker-compose
+
+# containerd.io 
+docker_containerd_io: 
+  https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.6-3.3.el7.x86_64.rpm

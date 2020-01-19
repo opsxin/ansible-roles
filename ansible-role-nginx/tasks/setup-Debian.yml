@@ -1,0 +1,21 @@
+---
+
+- name: Ensure dependencies is installed
+  apt:
+    name:
+      - curl
+      - gnupg2
+      - ca-certificates
+    state: present
+    update_cache: yes
+
+- name: Add nginx GPG key
+  apt_key:
+    url: "{{ nginx_debian_gpg_key }}"
+    state: present
+
+- name: Add nginx repository
+  apt_repository:
+    repo: "{{ nginx_debian_repository }}"
+    filename: nginx
+    state: present

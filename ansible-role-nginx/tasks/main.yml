@@ -1,0 +1,22 @@
+---
+
+- include_tasks: setup-Debian.yml
+  when: ansible_os_family == "Debian"
+
+- include_tasks: setup-Redhat.yml
+  when: ansible_os_family == "RedHat"
+
+- name: Ensure nginx is installed
+  package:
+    name: nginx
+    state: present
+
+- name: Add nginx.conf
+  template:
+    src: nginx.conf.j2
+    dest: "{{ nginx_conf_path }}"
+    backup: yes
+  notify: restart nginx
+
+- include_tasks: vhost.yml
+  when: nginx_vhost_enable | bool

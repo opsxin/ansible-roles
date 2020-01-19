@@ -1,0 +1,11 @@
+---
+
+# nginx user 
+nginx_user: "nginx"
+
+# nginx file location
+nginx_conf_path: /etc/nginx/nginx.conf
+nginx_vhost_path: /etc/nginx/conf.d
+nginx_logs_path: /var/log/nginx
+nginx_pid_path: /var/run/nginx.pid
+nginx_mime_types: /etc/nginx/mime.types

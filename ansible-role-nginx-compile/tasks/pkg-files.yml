@@ -1,0 +1,30 @@
+---
+
+- name: Download files
+  get_url:
+    url: "{{ item.url }}"
+    dest: "/tmp/{{ item.pkg_name }}.tar.gz"
+  with_items:
+    - "{{ nginx }}"
+    - "{{ openssl }}"
+    - "{{ pcre }}"
+    - "{{ zlib }}"
+  connection: local
+  run_once: yes
+
+# 创建远程临时存放路径
+- name: Create temporary directory
+  file:
+    path: "{{ tmp_path }}"
+    state: directory
+
+# 解压本地文件
+- name: Upload files
+  unarchive:
+    src: "/tmp/{{ item }}"
+    dest: "{{ tmp_path }}"
+  with_items:
+    - "{{ nginx.pkg_name }}.tar.gz"
+    - "{{ openssl.pkg_name }}.tar.gz"
+    - "{{ pcre.pkg_name }}.tar.gz"
+    - "{{ zlib.pkg_name }}.tar.gz"

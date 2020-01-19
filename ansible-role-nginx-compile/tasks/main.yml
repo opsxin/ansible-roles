@@ -1,0 +1,49 @@
+---
+
+- include_tasks: "setup-Debain.yml"
+  when: ansible_os_family == "Debian"
+
+- include_tasks: "setup-RedHat.yml"
+  when: ansible_os_family == "RedHat"
+
+- name: Download local and upload remote files
+  include_tasks: pkg-files.yml
+
+- name: Compile nginx
+  shell: |
+      sh configure {{ nginx_configure_parameter }}
+      make
+      make install
+  args:
+    chdir: "{{ tmp_path }}/{{ nginx.pkg_name }}"
+    creates: "{{ nginx_path }}/sbin/nginx"
+  register: result
+
+# 编译成功后删除临时目录
+- name: Remove temporary directory
+  file:
+    path: "{{ tmp_path }}"
+    state: absent
+  when: result.rc == 0
+
+- name: Create nginx conf.d
+  file:
+    path: "{{ nginx_vhost_path }}"
+    state: directory
+    owner: "{{ nginx_user }}"
+
+- name: Add nginx configure
+  template:
+    src: nginx.conf.j2
+    dest: "{{ nginx_conf_path }}/nginx.conf"
+    owner: "{{ nginx_user }}"
+    backup: yes
+
+- include_tasks: vhost.yml
+  when: nginx_vhost_enable | bool
+
+- name: Add nginx service
+  template:
+    src: nginx.service.j2
+    dest: /lib/systemd/system/nginx.service
+  notify: start nginx

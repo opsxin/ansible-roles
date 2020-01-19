@@ -1,0 +1,36 @@
+---
+
+nginx_user: nobody
+nginx_conf_path: "{{ nginx_path }}/conf"
+nginx_vhost_path: "{{ nginx_conf_path }}/conf.d"
+nginx_logs_path: "{{ nginx_path }}/logs"
+nginx_pid_path: "{{ nginx_logs_path }}/nginx.pid"
+nginx_mime_types: "{{ nginx_conf_path }}/mime.types"
+
+nginx:
+  pkg_name: "nginx-1.16.1"
+  url: "https://nginx.org/download/nginx-1.16.1.tar.gz"
+openssl:
+  pkg_name: "openssl-1.1.1d"
+  url: "https://www.openssl.org/source/openssl-1.1.1d.tar.gz"
+pcre:
+  pkg_name: "pcre-8.43"
+  url: "https://ftp.pcre.org/pub/pcre/pcre-8.43.tar.gz"
+zlib:
+  pkg_name: zlib-1.2.11
+  url: "https://zlib.net/zlib-1.2.11.tar.gz"
+
+tmp_path: "/tmp/nginx-compile"
+nginx_path: "/usr/local/nginx"
+
+nginx_configure_parameter: >-
+  --prefix={{ nginx_path }}
+  --user={{ nginx_user }}
+  --with-http_v2_module
+  --with-http_ssl_module
+  --with-stream
+  --with-stream_ssl_module
+  --with-http_sub_module
+  --with-zlib=../{{ zlib.pkg_name }}
+  --with-pcre=../{{ pcre.pkg_name }}
+  --with-openssl=../{{ openssl.pkg_name }}

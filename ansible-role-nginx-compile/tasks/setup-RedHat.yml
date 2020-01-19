@@ -1,0 +1,12 @@
+---
+
+- name: Install dependent
+  yum:
+    name:
+        - gcc
+        - gcc-c++
+        - make
+        # perl 5 openssl 编译需要
+        - perl
+    state: present
+    update_cache: yes

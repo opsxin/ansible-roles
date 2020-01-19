@@ -1,0 +1,11 @@
+---
+
+- name: Install dependent
+  apt:
+    name:
+        - gcc
+        - g++
+        - make
+        - perl
+    state: present
+    update_cache: yes

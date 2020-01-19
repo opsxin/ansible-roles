@@ -1,0 +1,13 @@
+---
+
+- hosts: all
+
+  roles:
+    - ansible-role-aria2
+    - ansible-role-docker
+    - ansible-role-mysql
+    - ansible-role-nginx
+    - ansible-role-nginx-compile
+    - ansible-role-redis
+    - ansible-role-redis-compile
+    - ansible-role-tomcat9

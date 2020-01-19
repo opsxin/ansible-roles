@@ -1,0 +1,21 @@
+---
+
+tomcat_port: "12"
+tomcat_shutdown_port: "34"
+tomcat_ajp_port: "56"
+tomcat_ssl_port: "78"
+
+tomcat_ssl_enable: false
+tomcat_ssl_config: |
+  <Connector port="{{ tomcat_ssl_port | default(8443) }}"
+             protocol="HTTP/1.1"
+             SSLEnabled="true"
+             scheme="https"
+             secure="true"
+             keystoreFile="keystore.pfx"
+             keystoreType="PKCS12"
+             keystorePass="passwd"
+             clientAuth="false"
+             SSLProtocol="TLSv1.1+TLSv1.2"
+             ciphers="TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA256"
+  />

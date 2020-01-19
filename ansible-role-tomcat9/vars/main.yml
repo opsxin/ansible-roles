@@ -1,0 +1,9 @@
+---
+
+tomcat_version: "9.0.27"
+tomcat_download_url:
+  http://mirrors.tuna.tsinghua.edu.cn/apache/tomcat/tomcat-9/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz
+
+tomcat_user: tomcat
+tomcat_basedir: /data
+tomcat_path: "{{ tomcat_basedir }}/apache-tomcat-{{ tomcat_version }}"

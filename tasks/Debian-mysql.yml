@@ -1,0 +1,23 @@
+---
+
+- name: Install apt-transport-https
+  apt:
+    name: apt-transport-https
+    state: present
+
+- name: Add mysql key
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: 8C718D3B5072E1F5
+
+- name: Add mysql repository
+  apt_repository:
+    repo: "{{ debian_apt_repository }}"
+
+- name: Install mysql
+  yum:
+    name:
+      - mysql-server
+      - mysql-client
+    state: present
+    update_cache: yes

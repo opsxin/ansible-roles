@@ -1,0 +1,6 @@
+---
+
+mysql_service: mysqld
+
+mysql_community_repository: >-
+  https://mirrors.ustc.edu.cn/mysql-repo/mysql57-community-release-el7-9.noarch.rpm

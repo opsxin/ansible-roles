@@ -1,0 +1,7 @@
+---
+
+mysql_service: mysql
+
+debian_apt_repository: >-
+  deb https://mirrors.tuna.tsinghua.edu.cn/mysql/apt/debian/
+  {{ ansible_distribution_release }} mysql-5.7

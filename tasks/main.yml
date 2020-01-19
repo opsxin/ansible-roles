@@ -1,0 +1,19 @@
+---
+
+- name: Include OS vars
+  include_vars: "{{ ansible_os_family }}.yml"
+
+# 移除 mariadb 等包
+- name: Remove mariadb
+  package:
+    name: "mariadb*"
+    state: absent
+
+- name: Add mysql source and install
+  include_tasks: "{{ ansible_os_family }}-mysql.yml"
+
+- name: Create data and log directory
+  include_tasks: dependent-mysql.yml
+
+- name: Configure mysql
+  include_tasks: "{{ ansible_os_family }}-config-mysql.yml"

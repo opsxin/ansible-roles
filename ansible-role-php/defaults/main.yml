@@ -1,0 +1,1 @@
+php_vars: "post_max_size = 1024M\nmemory_limit = 1024M\nupload_max_filesize = 1024M"

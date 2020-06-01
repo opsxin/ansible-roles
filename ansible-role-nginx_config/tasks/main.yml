@@ -1,0 +1,17 @@
+- name: Ensure script directory
+  file:
+    path: "/etc/zabbix/scripts"
+    state: directory
+
+- name: Copy script
+  copy:
+    src: nginx_config.py
+    dest: /etc/zabbix/scripts/nginx_config.py
+    mode: "0755"
+  notify: restart zabbix-agent
+
+- name: Copy userparameter
+  copy:
+    src: userparameter_nginx_config.conf
+    dest: /etc/zabbix/zabbix_agentd.d/userparameter_nginx_config.conf
+  notify: restart zabbix-agent

@@ -1,0 +1,13 @@
+# 包名
+archive_name: "gateway-1.0.0-SNAPSHOT.jar"
+# Jenkins 打包好的包路径
+archive_src_path: "{{ lookup('env', 'WORKSPACE') }}/target"
+# 项目运行路径
+project_dest_path: "/data01/tomcat/tomcat-54-gateway"
+
+# 是否备份
+project_archive_backup: no
+# 端口
+project_port: 8254
+
+java_home: /usr/local/jdk1.8.0_211

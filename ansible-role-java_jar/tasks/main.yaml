@@ -1,3 +1,11 @@
+- name: Ensure project path exist
+  file:
+    path: "{{ project_dest_path }}"
+    state: directory
+    owner: tomcat
+    group: tomcat
+    mode: 0755
+
 - name: Ensure service script exist
   template:
     src: service.sh.j2
@@ -24,7 +32,7 @@
   copy:
     src: "{{ archive_src_path }}/{{ archive_name }}"
     dest: "{{ project_dest_path }}/{{ archive_name }}"
-    backup: "{{ project_archive_backup }}"
+    backup: "{{ project_archive_backup | default('no') }}"
 
 - name: Start service
   shell: ./service.sh start

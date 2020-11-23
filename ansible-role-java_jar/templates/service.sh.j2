@@ -29,13 +29,13 @@ server_port="{{ project_port }}"
 # JAVA_HOME
 JAVA_HOME="{{ java_home }}"
 if [ -n "${JAVA_HOME}" ]; then
-    java="${JAVA_HOME}/bin/java"
+    java8="${JAVA_HOME}/bin/java"
 fi
 
-PROCESSID=$(ps axo pid,cmd | grep "${package_name}" | grep -v grep | awk '{print $1}')
+PROCESSID=$(ps axo pid,cmd | grep "${package_name}$" | grep -v grep | awk '{print $1}')
 
 function status() {
-    processnum=$(ps axo pid,cmd | grep "${package_name}" | grep -v grep | wc -l)
+    processnum=$(ps axo pid,cmd | grep "${package_name}$" | grep -v grep | wc -l)
     if [ ${processnum} -eq 1 ]; then 
         echo "程序已运行,pid 为 ${PROCESSID}"
     else 
@@ -44,7 +44,7 @@ function status() {
 }
 
 function start() {
-    processnum=$(ps axo pid,cmd | grep "${package_name}" | grep -v grep | wc -l)
+    processnum=$(ps axo pid,cmd | grep "${package_name}$" | grep -v grep | wc -l)
     if [ ${processnum} -eq 1 ]; then 
         echo "程序已运行,pid 为 ${PROCESSID}"
         exit 1 
@@ -64,10 +64,10 @@ function start() {
 
     if [ "${exec_user}" == "${startup_user}" ]; then
         echo "端口将会使用 ${server_port}"
-        nohup ${java:-java} ${start_parameter} -jar ${package_name} --server.port=${server_port} ${spring_parameter} >> ${package_name}.log 2>&1 &
+        nohup ${java8:-java} ${start_parameter} -jar ${package_name} --server.port=${server_port} ${spring_parameter} >> ${package_name}.log 2>&1 &
     elif [ "${exec_user}" == "root" ]; then 
         echo "端口将会使用 ${server_port}"
-        su -c "nohup ${java:-java} ${start_parameter} -jar ${package_name} --server.port=${server_port} ${spring_parameter} >> ${package_name}.log 2>&1 &" ${startup_user}
+        su -c "nohup ${java8:-java} ${start_parameter} -jar ${package_name} --server.port=${server_port} ${spring_parameter} >> ${package_name}.log 2>&1 &" ${startup_user}
     else
         echo "请使用 ${startup_user} 用户运行程序"
         exit 1

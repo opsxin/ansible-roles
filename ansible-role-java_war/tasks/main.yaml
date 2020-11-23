@@ -1,0 +1,70 @@
+- name: Stop service
+  shell: ./shutdown.sh
+  args:
+    chdir: "{{ project_dest_path }}/bin"
+    executable: /bin/bash
+
+- name: Get service port
+  shell: grep "<Connector" conf/server.xml | grep "HTTP/1.1" | egrep -o "[0-9]+" | head -n1
+  args:
+    chdir: "{{ project_dest_path }}"
+    executable: /bin/bash
+  changed_when: no
+  check_mode: no
+  register: project_port
+
+- name: Wait service stop
+  wait_for:
+    host: 0.0.0.0
+    port: "{{ project_port.stdout }}"
+    delay: 5
+    state: stopped
+    timeout: 120
+  ignore_errors: yes
+
+- name: Check service status
+  shell: ss -antl | grep {{ project_port.stdout }}
+  args:
+    executable: /bin/bash
+  ignore_errors: yes
+  changed_when: no
+  check_mode: no
+  register: service_status
+
+- block:
+    - name: Get Service PID
+      shell: ps aux | grep {{ project_dest_path }} | grep -v grep | awk '{print $2}'
+      args:
+        executable: /bin/bash
+      register: project_pid
+    - name: Stop service use Kill
+      shell: kill {{ project_pid.stdout }}
+      args:
+        executable: /bin/bash
+      when: project_pid.rc == 0
+  when: service_status.rc == 0
+
+- name: Upload war archive
+  copy:
+    src: "{{ archive_src_path }}/{{ archive_name }}"
+    dest: "{{ project_dest_path }}/webapps/{{ archive_name }}"
+    backup: "{{ project_archive_backup | default('no') }}"
+
+- name: Remove old archive
+  file:
+    path: "{{ project_dest_path }}/webapps/ROOT"
+    state: absent
+
+- name: Start service
+  shell: nohup ./startup.sh > /dev/null 2>&1 &
+  args:
+    chdir: "{{ project_dest_path }}/bin"
+    executable: /bin/bash
+
+- name: Wait service start
+  wait_for:
+    host: 0.0.0.0
+    port: "{{ project_port.stdout }}"
+    delay: 10
+    state: started
+    timeout: 300

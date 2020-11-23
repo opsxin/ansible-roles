@@ -44,16 +44,16 @@
       when: project_pid.rc == 0
   when: service_status.rc == 0
 
+- name: Remove old archive
+  file:
+    path: "{{ project_dest_path }}/webapps/{{ archive_name.split('.')[0] }}"
+    state: absent
+
 - name: Upload war archive
   copy:
     src: "{{ archive_src_path }}/{{ archive_name }}"
     dest: "{{ project_dest_path }}/webapps/{{ archive_name }}"
     backup: "{{ project_archive_backup | default('no') }}"
-
-- name: Remove old archive
-  file:
-    path: "{{ project_dest_path }}/webapps/ROOT"
-    state: absent
 
 - name: Start service
   shell: nohup ./startup.sh > /dev/null 2>&1 &
